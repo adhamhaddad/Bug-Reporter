@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS notes (
+    id SERIAL PRIMARY KEY,
+    note TEXT,
+    user_id INT NOT NULL REFERENCES users(id),
+    issue_id INT NOT NULL REFERENCES issues(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

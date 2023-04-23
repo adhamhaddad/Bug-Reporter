@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS profile_pictures (
+    id SERIAL PRIMARY KEY,
+    profile_url TEXT NOT NULL,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
