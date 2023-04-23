@@ -1,5 +1,6 @@
 import { PoolClient } from 'pg';
 import database from '../database';
+import Image, { ImageType } from './image';
 
 export type NoteType = {
   id: number;
@@ -35,7 +36,7 @@ class Note {
       throw error;
     }
   }
-  async createNote(n: NoteType): Promise<NoteType> {
+  async createNote(n: NoteType & { images: ImageType[] }): Promise<NoteType> {
     return this.withConnection(async (connection: PoolClient) => {
       return this.withTransaction(connection, async () => {
         const query = {
@@ -43,6 +44,19 @@ class Note {
           values: [n.note, n.issue_id]
         };
         const result = await connection.query(query);
+        const { id: note_id } = result.rows[0];
+        // Insert a new image
+        const { images } = n;
+        const image = new Image();
+        for (const img of images) {
+          const imageResult = await image.createImage(connection, img);
+          const { id: image_id } = imageResult;
+          // Link the image with the issue and note in the bridge tables
+          await connection.query(
+            'INSERT INTO issue_images (note_id, image_id) VALUES ($1, $2)',
+            [note_id, image_id]
+          );
+        }
         return result.rows[0];
       });
     });

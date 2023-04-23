@@ -1,5 +1,6 @@
 import { PoolClient } from 'pg';
 import database from '../database';
+import Image, { ImageType } from './image';
 
 type IssueType = {
   id?: number;
@@ -44,27 +45,45 @@ class Issue {
       throw error;
     }
   }
-  async createIssue(i: IssueType): Promise<IssueType> {
+  async createIssue(
+    i: IssueType & { images: ImageType[] }
+  ): Promise<IssueType> {
     return this.withConnection(async (connection: PoolClient) => {
-      const query = {
-        text: `
+      return this.withTransaction(connection, async () => {
+        const query = {
+          text: `
             INSERT INTO issues
             (category_id, reproducibility, severity, priority, summary, issue_desc, view_status, user_id)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *`,
-        values: [
-          i.category_id,
-          i.reproducibility,
-          i.severity,
-          i.priority,
-          i.summary,
-          i.issue_desc,
-          i.view_status,
-          i.user_id
-        ]
-      };
-      const result = await connection.query(query);
-      return result.rows[0];
+          values: [
+            i.category_id,
+            i.reproducibility,
+            i.severity,
+            i.priority,
+            i.summary,
+            i.issue_desc,
+            i.view_status,
+            i.user_id
+          ]
+        };
+        const result = await connection.query(query);
+        const { id: issue_id } = result.rows[0];
+
+        // Insert a new image
+        const { images } = i;
+        const image = new Image();
+        for (const img of images) {
+          const imageResult = await image.createImage(connection, img);
+          const { id: image_id } = imageResult;
+          // Link the image with the issue and note in the bridge tables
+          await connection.query(
+            'INSERT INTO issue_images (issue_id, image_id) VALUES ($1, $2)',
+            [issue_id, image_id]
+          );
+        }
+        return result.rows[0];
+      });
     });
   }
   async getIssues(): Promise<IssueType[]> {
