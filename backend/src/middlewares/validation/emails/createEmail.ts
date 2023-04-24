@@ -11,7 +11,10 @@ export const validateCreateEmail = [
     .isEmail()
     .withMessage('Email is not valid')
     .normalizeEmail()
-    .withMessage('Email is not normalized'),
+    .withMessage('Email is not normalized')
+    .not()
+    .contains('@admin.com')
+    .withMessage('Emails with @admin.com are not allowed'),
   body('user_id')
     .exists()
     .withMessage('user_id is missing from the body')

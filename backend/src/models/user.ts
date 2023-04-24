@@ -8,7 +8,6 @@ export type UserType = {
   first_name: string;
   last_name: string;
   username: string;
-  role: number;
   created_at?: Date;
   deleted_at?: Date;
 };
@@ -47,8 +46,8 @@ class User {
         const password = new Password();
 
         const query = {
-          text: 'INSERT INTO users (first_name, last_name, username, role) VALUES ($1, $2, $3, $4) RETURNING *',
-          values: [u.first_name, u.last_name, u.username, u.role]
+          text: 'INSERT INTO users (first_name, last_name, username) VALUES ($1, $2, $3) RETURNING *',
+          values: [u.first_name, u.last_name, u.username]
         };
         const result = await connection.query(query);
         const { id: user_id } = result.rows[0];

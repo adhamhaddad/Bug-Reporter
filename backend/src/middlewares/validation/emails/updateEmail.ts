@@ -16,6 +16,9 @@ export const validateUpdateEmail = [
     .isEmail()
     .withMessage('Email is not valid')
     .normalizeEmail()
-    .withMessage('Email is not normalized'),
+    .withMessage('Email is not normalized')
+    .not()
+    .contains('@admin.com')
+    .withMessage('Emails with @admin.com are not allowed'),
   (req: Request, res: Response, next: NextFunction) => validate(req, res, next)
 ];

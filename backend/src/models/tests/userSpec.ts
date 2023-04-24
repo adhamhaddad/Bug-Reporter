@@ -1,5 +1,5 @@
 import database from '../../database';
-import User, { UserType, UserTypes, UserRole } from '../user';
+import User, { UserType, UserTypes } from '../user';
 
 const user = new User();
 
@@ -17,23 +17,21 @@ describe('User Model', () => {
       first_name: 'Adham',
       last_name: 'Haddad',
       email: 'adhamhaddad.dev@gmail.com',
-      password: 'adham123',
-      role: UserRole.TENANT
+      password: 'adham123'
     } as UserTypes;
 
     const newUser2 = {
       first_name: 'Adham',
       last_name: 'Ashraf',
       email: 'adhamhaddad@gmail.com',
-      password: 'adham123',
-      role: UserRole.CLIENT
+      password: 'adham123'
     } as UserTypes;
 
     const updated = {
       first_name: 'Adham',
       last_name: 'Haddad',
-      role: UserRole.CLIENT
-    };
+      username: 'adhamhaddad'
+    } as UserType;
 
     beforeAll(async () => {
       const connection = await database.connect();
@@ -58,8 +56,7 @@ describe('User Model', () => {
       expect(result).toEqual({
         id: 2,
         first_name: 'Adham',
-        last_name: 'Ashraf',
-        role: 0
+        last_name: 'Ashraf'
       } as UserType);
     });
 
@@ -68,8 +65,7 @@ describe('User Model', () => {
       expect(result).toEqual({
         id: 2,
         first_name: 'Adham',
-        last_name: 'Ashraf',
-        role: 0
+        last_name: 'Ashraf'
       } as UserType);
     });
 
@@ -79,7 +75,7 @@ describe('User Model', () => {
         id: 2,
         first_name: 'Adham',
         last_name: 'Haddad',
-        role: 0
+        username: 'adhamhaddad'
       } as UserType);
     });
 

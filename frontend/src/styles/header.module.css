@@ -1,0 +1,27 @@
+.header {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--background-dark);
+    padding: 0px 20px;
+}
+.header .logo {
+    color: #FFF;
+    display: flex;
+    align-items: center;
+}
+.header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header nav .nav-buttons {
+    height: 50px;
+    width: 100px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #ddd;
+    border: none;
+}

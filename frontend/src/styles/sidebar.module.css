@@ -1,0 +1,21 @@
+.sidebar {
+    width: 200px;
+    height: 100%;
+    background-color: var(--background-dark);
+    color: #FFF;
+}
+.sidebar ul {
+    list-style-type: none;
+}
+.sidebar ul li {
+    border-bottom: 1px solid #FFF;
+}
+.sidebar ul li a {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 10px;
+}
+.active {
+    background-color: #343434;
+}

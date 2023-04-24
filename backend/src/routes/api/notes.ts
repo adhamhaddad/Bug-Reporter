@@ -13,14 +13,15 @@ import {
   updateNote,
   deleteNote
 } from '../../controllers/notes';
+import { verifyToken } from '../../middlewares/verifyToken';
 
 const router = Router();
 
 router
-  .post('/', validateCreateNote, createNote)
-  .get('/all/:id', validateGetNotes, getNotes)
-  .get('/:id', validateGetNote, getNote)
-  .patch('/:id', validateUpdateNote, updateNote)
-  .delete('/:id', validateDeleteNote, deleteNote);
+  .post('/', validateCreateNote, verifyToken, createNote)
+  .get('/all/:id', validateGetNotes, verifyToken, getNotes)
+  .get('/:id', validateGetNote, verifyToken, getNote)
+  .patch('/:id', validateUpdateNote, verifyToken, updateNote)
+  .delete('/:id', validateDeleteNote, verifyToken, deleteNote);
 
 export default router;

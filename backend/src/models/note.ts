@@ -1,6 +1,6 @@
 import { PoolClient } from 'pg';
 import database from '../database';
-import Image, { ImageType } from './image';
+import { ImageType, createImage } from './image';
 
 export type NoteType = {
   id: number;
@@ -47,9 +47,8 @@ class Note {
         const { id: note_id } = result.rows[0];
         // Insert a new image
         const { images } = n;
-        const image = new Image();
         for (const img of images) {
-          const imageResult = await image.createImage(connection, img);
+          const imageResult = await createImage(connection, img);
           const { id: image_id } = imageResult;
           // Link the image with the issue and note in the bridge tables
           await connection.query(

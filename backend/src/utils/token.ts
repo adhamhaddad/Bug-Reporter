@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
-import jwt, { SignOptions } from 'jsonwebtoken';
 import configs from '../configs';
 import Auth from '../models/auth';
 
@@ -10,7 +10,6 @@ type Payload = {
   first_name: string;
   last_name: string;
   username: string;
-  role: number;
 };
 
 const privateAccessKey = path.join(
@@ -21,14 +20,6 @@ const privateAccessKey = path.join(
   'accessToken',
   'private.key'
 );
-const publicAccessKey = path.join(
-  __dirname,
-  '..',
-  '..',
-  'keys',
-  'accessToken',
-  'public.key'
-);
 const privateRefreshKey = path.join(
   __dirname,
   '..',
@@ -36,6 +27,14 @@ const privateRefreshKey = path.join(
   'keys',
   'refreshToken',
   'private.key'
+);
+const publicAccessKey = path.join(
+  __dirname,
+  '..',
+  '..',
+  'keys',
+  'accessToken',
+  'public.key'
 );
 const publicRefreshKey = path.join(
   __dirname,
@@ -71,7 +70,7 @@ export const verifyAccessToken = async (
 ) => {
   const authorization = req.headers.authorization as string;
   if (!authorization) {
-    res.status(401).json({
+    return res.status(401).json({
       status: false,
       message: 'Not Authorized'
     });

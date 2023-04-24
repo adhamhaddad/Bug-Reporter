@@ -1,0 +1,51 @@
+.report-issue {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.report-form {
+    border: 1px solid #ddd;
+}
+
+.form-box {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-box:last-child {
+    border-bottom: none;
+}
+
+.form-box_title {
+    width: 30%;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.form-box_inputs {
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.form-box_inputs textarea {
+    width: 100%;
+    resize: none;
+    border: 1px solid #ddd;
+}
+
+.form-box_inputs select {
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background-color: #FFF;
+}
+
+.form-box_inputs label {
+    padding: 0px 5px;
+}
+
+.form-box_inputs label input {
+    margin-left: 2px;
+}
